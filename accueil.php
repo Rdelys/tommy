@@ -271,10 +271,7 @@
     </style>
 </head>
 <body>
-    <div class="topbar">
-        <img width="100px" src="images/logo.png" alt="Logo">
-        <i class="fas fa-bars dropdown-icon"></i>
-    </div>
+    <?php include('topbar.php'); ?>
 
     <main>
         <div class="search-container">
@@ -312,17 +309,17 @@
             </div>
             <div class="carousel-wrapper" id="carouselWrapper">
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles1.jpeg" alt="Produit 1">
+                    <img src="./images/carrousel/meubles/meubles1.jpeg" alt="Produit 1">
                         <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
+                            <h3>Etagère et lavabo</h3>
+                            <p style="color: #e89f2f; font-weight: bold;">500 €</p>
+                            <p style="color: #606060;">Matières en bois - Bretagne</p>
                             <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                         </div>            
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles2.jpeg" alt="Produit 2">
+                    <img src="./images/carrousel/meubles/meubles2.jpeg" alt="Produit 2">
                     <div class="carousel-item-details">
                             <h3>Canapé</h3>
                             <p style="color: #e89f2f; font-weight: bold;">100 €</p>
@@ -332,11 +329,11 @@
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles3.jpg" alt="Produit 3">
+                    <img src="./images/carrousel/meubles/meubles3.jpeg" alt="Produit 3">
                     <div class="carousel-item-details">
-                        <h3>Canapé</h3>
+                        <h3>Table TV</h3>
                         <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                        <p style="color: #606060;">Canapé une place - Paris</p>
+                        <p style="color: #606060;">Table TV</p>
                         <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                     </div>
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
@@ -344,33 +341,37 @@
             </div>
         </div>
         <div class="carousel-container">
+            <div class="carousel-header">
+                <span style="color: #10bacf;">Vehicules</span>
+                <i class="fas fa-chevron-right" id="next"></i>
+            </div>
             <div class="carousel-wrapper" id="carouselWrapper">
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles1.jpeg" alt="Produit 1">
+                    <img src="./images/carrousel/vehicules/vehicules1.jpeg" alt="Produit 1">
                         <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
+                            <h3>Vehicules</h3>
+                            <p style="color: #e89f2f; font-weight: bold;">5000 €</p>
+                            <p style="color: #606060;">Voiture bleu</p>
                             <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                         </div>            
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles2.jpeg" alt="Produit 2">
+                    <img src="./images/carrousel/vehicules/vehicules2.jpeg" alt="Produit 2">
                     <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
+                            <h3>Voiture</h3>
+                            <p style="color: #e89f2f; font-weight: bold;">3500 €</p>
+                            <p style="color: #606060;">Couleur Orange - Paris</p>
                             <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                         </div>
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles3.jpg" alt="Produit 3">
+                    <img src="./images/carrousel/vehicules/bicyclette.jpeg" alt="Produit 3">
                     <div class="carousel-item-details">
                         <h3>Canapé</h3>
-                        <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                        <p style="color: #606060;">Canapé une place - Paris</p>
+                        <p style="color: #e89f2f; font-weight: bold;">800 €</p>
+                        <p style="color: #606060;">Vélo</p>
                         <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                     </div>
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
@@ -378,116 +379,72 @@
             </div>
         </div>
         <div class="carousel-container">
+            <div class="carousel-header">
+                <span style="color: #10bacf;">Appareils électrique et gadgets</span>
+                <i class="fas fa-chevron-right" id="next"></i>
+            </div>
             <div class="carousel-wrapper" id="carouselWrapper">
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles1.jpeg" alt="Produit 1">
+                    <img src="./images/carrousel/appareil/ecouteur.jpeg" alt="Produit 1">
                         <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
+                            <h3>Ecouteur</h3>
+                            <p style="color: #e89f2f; font-weight: bold;">25 €</p>
+                            <p style="color: #606060;">Ecouteur sans fil</p>
                             <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                         </div>            
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles2.jpeg" alt="Produit 2">
+                    <img src="./images/carrousel/appareil/macbook.jpeg" alt="Produit 2">
                     <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
+                            <h3>MacBook</h3>
+                            <p style="color: #e89f2f; font-weight: bold;">650 €</p>
+                            <p style="color: #606060;">MacBook Pro - Bretagne</p>
                             <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                         </div>
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/carrousel/meubles3.jpg" alt="Produit 3">
+                    <img src="./images/carrousel/appareil/smartwatch.jpeg" alt="Produit 3">
                     <div class="carousel-item-details">
-                        <h3>Canapé</h3>
-                        <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                        <p style="color: #606060;">Canapé une place - Paris</p>
+                        <h3>Smart Watch</h3>
+                        <p style="color: #e89f2f; font-weight: bold;">220 €</p>
+                        <p style="color: #606060;">Smart Watch multifonctionnel</p>
                         <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
                     </div>
                     <div class="heart-circle"><i class="fas fa-heart"></i></div>
                 </div>
             </div>
         </div>
-        <div class="carousel-container">
-            <div class="carousel-wrapper" id="carouselWrapper">
-                <div class="carousel-item">
-                    <img src="/images/carrousel/meubles1.jpeg" alt="Produit 1">
-                        <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
-                            <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
-                        </div>            
-                    <div class="heart-circle"><i class="fas fa-heart"></i></div>
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/carrousel/meubles2.jpeg" alt="Produit 2">
-                    <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
-                            <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
-                        </div>
-                    <div class="heart-circle"><i class="fas fa-heart"></i></div>
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/carrousel/meubles3.jpg" alt="Produit 3">
-                    <div class="carousel-item-details">
-                        <h3>Canapé</h3>
-                        <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                        <p style="color: #606060;">Canapé une place - Paris</p>
-                        <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
-                    </div>
-                    <div class="heart-circle"><i class="fas fa-heart"></i></div>
-                </div>
+        <p style="color: #a7a7a7; font-weight: 400;font-size:  10px; text-align:justify;">Gens du Voyage Trouvez tout ce dont vous avez besoin sur Gens du Voyage, le site incontournable de petites annonces en ligne. Explorez une large gamme de catégories : Maison & Jardin pour vos meubles et  électroménagers,  Vêtements & Accessoires pour les dernières tendances mode, Loisirs & Hobbies  pour les passionnés de musique, films et livres, ainsi que Véhicules pour acheter ou vendre des voitures, motos et plus. Découvrez aussi nos sections  Électronique,  Immobilier, Équipements Professionnels, Bébé & Enfant et Animaux & Accessoires. Gens du Voyage est votre 
+            destination pour acheter, vendre et échanger facilement partout en France.</p>
+        <div  style="padding: 10px;margin-top: 10px; width: 330px; height: 165px; background-color: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; justify-content: space-between;">
+            <p style="font-size: 10px; text-align: left; margin: 0; font-weight: 400;">© 2025 Annonces en France™. Tous droits réservés.</p>
+
+            <div style="display: flex; justify-content: center; margin: 10px 0;">
+                <img src="./images/paiement.png" alt="paiement" style="max-width: 100px; height: auto;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between;gap: 10px;">
+                <p style="font-size: 10px; text-align: left; margin: 0; font-weight: 400;">Payment Method 1
+                  <br>À propos <br>
+Politique de confidentialité <br> 
+Conditions d'utilisation <br>
+Politique des cookies <br>
+Avertissement <br>
+</p>
+                <p style="font-size: 10px; text-align: right; margin: 0; font-weight: 400;">Mentions légales <br>
+Politique de modération <br>
+Politique de remboursement <br>
+FAQs <br>
+Contact <br></p>
             </div>
         </div>
-        <div class="carousel-container">
-            <div class="carousel-wrapper" id="carouselWrapper">
-                <div class="carousel-item">
-                    <img src="/images/carrousel/meubles1.jpeg" alt="Produit 1">
-                        <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
-                            <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
-                        </div>            
-                    <div class="heart-circle"><i class="fas fa-heart"></i></div>
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/carrousel/meubles2.jpeg" alt="Produit 2">
-                    <div class="carousel-item-details">
-                            <h3>Canapé</h3>
-                            <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                            <p style="color: #606060;">Canapé une place - Paris</p>
-                            <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
-                        </div>
-                    <div class="heart-circle"><i class="fas fa-heart"></i></div>
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/carrousel/meubles3.jpg" alt="Produit 3">
-                    <div class="carousel-item-details">
-                        <h3>Canapé</h3>
-                        <p style="color: #e89f2f; font-weight: bold;">100 €</p>
-                        <p style="color: #606060;">Canapé une place - Paris</p>
-                        <p style="color: #a7a7a7; font-size:  small;">Livraison possible</p>
-                    </div>
-                    <div class="heart-circle"><i class="fas fa-heart"></i></div>
-                </div>
-            </div>
-        </div>
+
     </main>
 
-    <div class="navbar">
-        <a class="active" title="Accueil"><i class="fas fa-house-chimney icon"></i><span>Accueil</span></a>
-        <a href="accueil.html" title="Recherche"><i class="fas fa-search icon"></i><span>Recherche</span></a>
-        <a href="publier.html" title="Publier"><i class="fas fa-plus-circle icon"></i><span>Publier</span></a>
-        <a href="#" title="Messages"><i class="fas fa-message icon"></i><span>Messages</span></a>
-        <a href="compte.html" title="Compte"><i class="fas fa-user icon"></i><span>Compte</span></a>
-    </div>
+    <?php include('navbar.php'); ?>
+
 
     <script>
         const carouselWrapper = document.getElementById("carouselWrapper");

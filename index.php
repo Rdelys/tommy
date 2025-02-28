@@ -1,3 +1,56 @@
+<?php
+include 'connecte.php';
+
+if (isset($_SESSION['user'])) {
+    header("Location: accueil.php");
+    exit();
+}
+
+if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+    $saved_email = $_COOKIE['email'];
+    $saved_password = $_COOKIE['password'];
+} else {
+    $saved_email = "";
+    $saved_password = "";
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nomEtprenom = trim($_POST['nomEtprenom']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $confirmPassword = trim($_POST['confirmerpassword']);
+    $checkbox = isset($_POST['remember']);
+
+    if (empty($nomEtprenom) || empty($email) || empty($password) || empty($confirmPassword)) {
+        echo "<script>alert('Veuillez remplir tous les champs.'); window.location.href='inscription.php';</script>";
+        exit();
+    }
+
+    if ($password !== $confirmPassword) {
+        echo "<script>alert('Les mots de passe ne correspondent pas.'); window.location.href='inscription.php';</script>";
+        exit();
+    }
+
+    if (!$checkbox) {
+        echo "<script>alert('Veuillez accepter les termes et conditions.'); window.location.href='inscription.php';</script>";
+        exit();
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $conn->prepare("INSERT INTO utilisateur (nomEtprenom, email, password) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $nomEtprenom, $email, $hashedPassword);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Inscription réussie !'); window.location.href='connexion.php';</script>";
+    } else {
+        echo "<script>alert('Erreur lors de l'inscription. Veuillez réessayer.'); window.location.href='index.php';</script>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -169,7 +222,7 @@
     <main>
         <div class="card">
             <h4>Créer un compte</h4>
-            <form>
+            <form method="POST" action="index.php">
                 <div class="form-group">
                     <label for="nomEtprenom">Nom et prénom</label>
                     <input type="text" id="nomEtprenom" name="nomEtprenom" required>
@@ -203,11 +256,6 @@
                 document.querySelector(".content").style.display = "block";
             }, 5000);
         };
-
-        document.querySelector("form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Empêche l'envoi classique du formulaire
-            window.location.href = "accueil.php"; // Redirige vers accueil.html
-        });
     </script>
 </body>
 </html>

@@ -1,3 +1,63 @@
+<?php
+session_start();
+include 'connecte.php'; // Fichier de connexion à la base de données
+
+if (isset($_SESSION['user'])) {
+    header("Location: accueil.php");
+    exit();
+}
+
+if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+    $saved_email = $_COOKIE['email'];
+    $saved_password = $_COOKIE['password'];
+} else {
+    $saved_email = "";
+    $saved_password = "";
+}
+
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Vérification si les champs ne sont pas vides
+    if (!empty($email) && !empty($password)) {
+        $stmt = $conn->prepare("SELECT * FROM utilisateur WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            // Vérification du mot de passe
+            if (password_verify($password, $row['password'])) {
+                $_SESSION['user'] = $row['nomEtprenom']; // Stocker le nom dans la session
+            
+                // Se souvenir de moi
+                if (isset($_POST['remember'])) {
+                    setcookie('email', $email, time() + (86400 * 30), "/"); // 30 jours
+                    setcookie('password', $password, time() + (86400 * 30), "/"); // 30 jours
+                } else {
+                    setcookie('email', '', time() - 3600, "/"); // Efface le cookie
+                    setcookie('password', '', time() - 3600, "/"); // Efface le cookie
+                }
+            
+                // Redirection vers accueil
+                header("Location: accueil.php");
+                exit();
+            } else {
+                $message = "Mot de passe incorrect.";
+            }
+        } else {
+            $message = "Email non trouvé.";
+        }
+    } else {
+        $message = "Veuillez remplir tous les champs.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -82,7 +142,7 @@
         .card {
             background-color: #f9f9f9;
             border-radius: 10px;
-            padding: 20px;
+            padding: 30px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
@@ -168,7 +228,7 @@
             margin-bottom: 10px;
             text-align: justify;
             width: 100%;
-            height: 120px;
+            height: 45px;
             font-weight: bold;
         }
 
@@ -185,23 +245,25 @@
 
     <main>
         <div class="card">
-            <div class="alert" id="alert-message">
-                <i class="fas fa-info-circle"></i> Oups ! Veuillez vous connecter ou <br>
-                créer un compte pour continuer.
-            </div>
+            <?php if (isset($message)) : ?>
+                <div class="alert" style="display:block;">
+                    <i class="fas fa-info-circle"></i> <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
+
             <h4>Connectez vous avec votre compte</h2>
-            <form id="login-form">
+            <form id="login-form" method="POST">
                 <div class="form-group">
                     <label for="email">Votre email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($saved_email); ?>" required>
+                    </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($saved_password); ?>" required>
                 </div>
                 <div class="form-options">
                     <label>
-                        <input type="checkbox" name="remember"> Se souvenir de moi
+                        <input type="checkbox" name="remember" <?php if (!empty($saved_email)) echo 'checked'; ?>> Se souvenir de moi
                     </label>
                     <a href="#">Mot de passe oublié?</a>
                 </div>
@@ -211,19 +273,6 @@
         </div>
     </main>
     <script>
-        document.getElementById("login-form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Empêche l'envoi classique du formulaire
-            
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-            var alertMessage = document.getElementById("alert-message");
-
-            if (email === "test@test.com" && password === "test") {
-                window.location.href = "accueil.php";
-            } else {
-                alertMessage.style.display = "block";
-            }
-        });
     </script>
     
 </body>
