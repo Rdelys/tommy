@@ -1,3 +1,36 @@
+<?php
+include 'connecte.php';
+
+// Récupérer les catégories et sous-catégories
+$sql = "SELECT c.id AS categorie_id, c.categorie, s.id AS souscategorie_id, s.nom AS souscategorie
+        FROM categorie c
+        LEFT JOIN souscategorie s ON c.id = s.idcategorie
+        ORDER BY c.categorie, s.nom";
+$result = $conn->query($sql);
+
+// Structurer les données pour affichage
+$categories = [];
+while ($row = $result->fetch_assoc()) {
+    $categorie_id = $row['categorie_id'];
+    $categorie_nom = $row['categorie'];
+    $souscategorie_id = $row['souscategorie_id'];
+    $souscategorie_nom = $row['souscategorie'];
+
+    if (!isset($categories[$categorie_id])) {
+        $categories[$categorie_id] = [
+            'nom' => $categorie_nom,
+            'souscategories' => []
+        ];
+    }
+
+    if ($souscategorie_id) {
+        $categories[$categorie_id]['souscategories'][] = [
+            'id' => $souscategorie_id,
+            'nom' => $souscategorie_nom
+        ];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -45,7 +78,7 @@
             margin-right: auto;
             padding-bottom: 80px;
             overflow-y: auto;
-            height: calc(100vh - 150px);
+            height: calc(100vh - 100px);
         }
 
         h4 {
@@ -77,7 +110,7 @@
 
         p.info-text {
             color: gray;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .category-container {
@@ -119,43 +152,7 @@
             margin-top: 20px;
         }
 
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: space-around;
-            padding: 25px;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        .navbar a {
-            color: #636363;
-            text-align: center;
-            text-decoration: none;
-            font-size: 24px;
-            width: 20%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .navbar a:hover, .navbar a.active {
-            color: #10bacf;
-        }
-
-        .icon {
-            font-size: 22px;
-        }
-
-        .navbar span {
-            font-size: 12px;
-            margin-top: 5px;
-            color: #636363;
-        }
-
+        
         .dropdown-icon {
             font-size: 24px;
             cursor: pointer;
@@ -171,6 +168,58 @@
                 max-width: 800px;
             }
         }
+
+        .select-container {
+    position: relative;
+    width: 100%;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    appearance: none;
+    cursor: pointer;
+}
+
+/* Icône dropdown */
+.select-container::after {
+    content: '\f078';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #fd9b00;
+}
+
+/* Style des options */
+option {
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* Mettre en gras les catégories principales */
+option[style="font-weight:bold;"] {
+    font-weight: bold;
+    background-color: #e0e0e0;
+}
+
+/* Mettre en retrait les sous-catégories */
+option:not([style="font-weight:bold;"]) {
+    padding-left: 20px;
+}
+
+#categorie optgroup option {
+    color: orange;
+}
+
     </style>
 </head>
 <body>
@@ -182,38 +231,53 @@
     <main>
         <h4>Ajouter des détails à votre annonce</h4>
         
-        <label for="titre">Titre de l'annonce</label>
-        <div class="input-container">
-            <input type="text" id="titre" placeholder="">
-            <i class="fas fa-times clear-icon" onclick="document.getElementById('titre').value = '';" title="Effacer"></i>
-        </div>
-        <p class="info-text">Le titre de l'annonce doit être concis et informatif. <br>
-        par exemple "vente d'un Iphone 15 neuf</p>
-        <br>
-        <label for="description">Description de l'annonce</label>
-        <div class="input-container">
-            <textarea id="description" placeholder="Décrivez en détails votre annonce..." rows="6"></textarea>
-        </div>
-        <p class="info-text">La description doit fournir toutes les informations <br>
-        pertinentes sur l'objet ou le service que vous annoncez</p>
-        <br>
-        <label for="categorie">Choisir une catégorie</label>
-        <div class="category-container">
-            <input type="text" id="categorie">
-            <button onclick="document.getElementById('categorie').value = '';">Modifier</button>
-        </div>
-        <p class="info-text">Caravanes, camping-car, Mobil-homes, Accessoires de caravaning</p>
-        <br><br><br><br><br>
-        <a href="publierPhoto.html"><button class="submit-btn">Suivant</button></a>
-    </main>
-
-    <div class="navbar">
-        <a href="accueil.html" title="Accueil"><i class="fas fa-house-chimney icon"></i><span>Accueil</span></a>
-        <a href="accueil.html" title="Recherche"><i class="fas fa-search icon"></i><span>Recherche</span></a>
-        <a class="active" href="#" title="Publier"><i class="fas fa-plus-circle icon"></i><span>Publier</span></a>
-        <a href="#" title="Messages"><i class="fas fa-message icon"></i><span>Messages</span></a>
-        <a href="compte.html" title="Compte"><i class="fas fa-user icon"></i><span>Compte</span></a>
+        <form action="traitement.php" method="post">
+    <label for="titre">Titre de l'annonce</label>
+    <div class="input-container">
+        <input type="text" id="titre" name="titre" placeholder="">
     </div>
+    <p class="info-text">Le titre de l'annonce doit être concis et informatif. <br>
+    par exemple "vente d'un Iphone 15 neuf</p>
+    <br>
+    <label for="description">Description de l'annonce</label>
+    <div class="input-container">
+        <textarea id="description" name="description" placeholder="Décrivez votre annonce"></textarea>
+    </div>
+    <p class="info-text">La description doit fournir toutes les informations <br>
+    pertinentes sur l'objet ou le service que vous annoncez</p>
+    <br>
+    <label for="categorie">Choisir une catégorie</label>
+    <div class="select-container">
+        <select id="categorie" name="categorie">
+            <option value="">Sélectionner une catégorie</option>
+            <?php foreach ($categories as $id => $cat) : ?>
+                <option value="<?= $cat['nom'] ?>" style="font-weight:bold;">
+                    <?= htmlspecialchars($cat['nom']) ?>
+                </option>
+                <?php foreach ($cat['souscategories'] as $souscat) : ?>
+                    <option value="<?= $souscat['nom'] ?>">
+                        <?= htmlspecialchars($cat['nom']) ?> > <?= htmlspecialchars($souscat['nom']) ?>
+                    </option>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <br>
+    <p class="info-text">Caravanes, camping-car, Mobil-homes, Accessoires de caravaning</p>
+    <button type="submit" class="submit-btn">Suivant</button>
+</form>
+
+    </main>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var options = document.querySelectorAll("#categorie option[data-type='souscategorie']");
+
+        options.forEach(option => {
+            option.style.color = "orange";
+        });
+    });
+</script>
+
 </body>
 </html>
 

@@ -1,3 +1,34 @@
+<?php
+include 'connecte.php';
+
+if (isset($_GET['id'])) {
+    $idproduit = intval($_GET['id']);
+    echo "ID du produit : " . $idproduit;
+} else {
+    echo "Aucun produit trouvé";
+    exit();
+}
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['etat']) && isset($_POST['idproduit'])) {
+    $idproduit = intval($_POST['idproduit']);
+    $etat = $_POST['etat']; // État sélectionné
+
+    // Préparer l'insertion dans la base de données
+    $sql = "INSERT INTO etatproduit (idproduit, etat) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("is", $idproduit, $etat);
+
+    if ($stmt->execute()) {
+        echo "L'état du produit a été mis à jour avec succès.";
+        // Rediriger vers la page suivante après l'ajout
+        header("Location: publierAnnonce.php?id=$idproduit");
+        exit(); // Arrêter l'exécution après la redirection
+    } else {
+        echo "Erreur lors de l'ajout de l'état.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -45,7 +76,7 @@
             margin-right: auto;
             padding-bottom: 80px;
             overflow-y: auto;
-            height: calc(100vh - 150px);
+            height: calc(100vh - 100px);
         }
 
         h4 {
@@ -90,7 +121,7 @@
         p.info-text {
             color: gray;
             font-size: 12px;
-            margin-bottom: 450px;
+            margin-bottom: 300px;
             text-align: justify;
         }
 
@@ -132,43 +163,6 @@
             color: white;
         }
 
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: space-around;
-            padding: 25px;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        .navbar a {
-            color: #636363;
-            text-align: center;
-            text-decoration: none;
-            font-size: 24px;
-            width: 20%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .navbar a:hover, .navbar a.active {
-            color: #10bacf;
-        }
-
-        .icon {
-            font-size: 22px;
-        }
-
-        .navbar span {
-            font-size: 12px;
-            margin-top: 5px;
-            color: #636363;
-        }
-
         .dropdown-icon {
             font-size: 24px;
             cursor: pointer;
@@ -196,37 +190,58 @@
     </div>
 
     <main>
-        <h4>Ajouter plus de détails à votre annonce</h4>
+    <h4>Ajouter plus de détails à votre annonce</h4>
 
-        <label for="etat">État du produit</label>
-        <div class="select-container">
-            <select id="etat">
-                <option value="" disabled selected>Sélectionner une option</option>
-                <option value="neuf">Neuf</option>
-                <option value="tresbon">Très bon état</option>
-                <option value="bon">Bon état</option>
-                <option value="acceptable">Acceptable</option>
-            </select>            
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <p class="info-text">Sélectionnez l'état général du produit parmi les
-            options disponibles. Cela aide les acheteurs à évaluer la Condition
-            de l'objet avant l'achat. Assurez vous de choisier l'option qui décrit le mieux
-            l'état actuel du produit.
-        </p>
+<form method="POST" action="">
+    <input type="hidden" name="idproduit" value="<?= $idproduit ?>">
 
-        <div class="btn-group">
-            <a href="publierPhoto.html" class="btn btn-return"><i class="fas fa-arrow-left"></i> Retour</a>
-            <a href="publierAnnonce.html" class="btn btn-submit">Suivant</a>
-        </div>
-    </main>
-
-    <div class="navbar">
-        <a href="accueil.html" title="Accueil"><i class="fas fa-house-chimney icon"></i><span>Accueil</span></a>
-        <a href="accueil.html" title="Recherche"><i class="fas fa-search icon"></i><span>Recherche</span></a>
-        <a class="active" href="#" title="Publier"><i class="fas fa-plus-circle icon"></i><span>Publier</span></a>
-        <a href="#" title="Messages"><i class="fas fa-message icon"></i><span>Messages</span></a>
-        <a href="compte.html" title="Compte"><i class="fas fa-user icon"></i><span>Compte</span></a>
+    <label for="etat">État du produit</label>
+    <div class="select-container">
+        <select id="etat" name="etat" required>
+            <option value="" disabled selected>Sélectionner une option</option>
+            <option value="neuf">Neuf</option>
+            <option value="tresbon">Très bon état</option>
+            <option value="bon">Bon état</option>
+            <option value="acceptable">Acceptable</option>
+        </select>
+        <i class="fas fa-chevron-down"></i>
     </div>
+
+    <p class="info-text">Sélectionnez l'état général du produit parmi les
+        options disponibles. Cela aide les acheteurs à évaluer la Condition
+        de l'objet avant l'achat. Assurez-vous de choisir l'option qui décrit le mieux
+        l'état actuel du produit.
+    </p>
+
+    <div class="btn-group">
+        <a href="publierPhoto.php" class="btn btn-return"><i class="fas fa-arrow-left"></i> Retour</a>
+        <button type="submit" class="btn btn-submit">Suivant</button>
+    </div>
+</form>
+</main>
 </body>
 </html>
+
+<script>
+// Lorsque l'utilisateur choisit un état du produit
+document.getElementById('etat').addEventListener('change', function() {
+// Sauvegarde de l'état du produit dans localStorage
+let etat = this.value;
+localStorage.setItem('etat', etat);
+});
+
+// Lorsque l'utilisateur clique sur le bouton "Suivant"
+document.querySelector('.btn-submit').addEventListener('click', function() {
+// Récupération de l'état sauvegardé dans localStorage
+let etat = localStorage.getItem('etat');
+
+// Vérification que l'état a bien été sélectionné avant de continuer
+if (!etat) {
+    alert('Veuillez sélectionner l\'état du produit avant de continuer.');
+    return;
+}
+
+// Rediriger vers la page suivante
+window.location.href = 'publierAnnonce.php?id=' + <?= $idproduit ?>;
+});
+</script>
