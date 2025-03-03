@@ -80,9 +80,8 @@
     </style>
 </head>
 <body>
-    <div class="topbar">
-        <img width="100px" src="images/logo.png" alt="Logo">
-    </div>
+    <?php include('topbar.php'); ?>
+
 
     <main>
         <img class="logo" src="images/logo-moyen.png" alt="Logo Moyen">

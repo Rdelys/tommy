@@ -1,3 +1,14 @@
+<?php
+session_start(); // Démarre la session PHP pour accéder aux variables de session
+
+// Vérifiez si l'utilisateur est connecté
+if (!isset($_SESSION['user'])) {
+    // Redirigez l'utilisateur vers la page de connexion si ce n'est pas le cas
+    header('Location: connexion.php'); // Remplacez 'login.php' par la page de votre choix
+    exit(); // Arrête l'exécution du script
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -159,10 +170,7 @@
     </style>
 </head>
 <body>
-    <div class="topbar">
-        <img width="100px" src="images/logo.png" alt="Logo">
-        <i class="fas fa-bars dropdown-icon"></i>
-    </div>
+    <?php include('topbar.php'); ?>
 
     <main>
         <div class="card">
@@ -181,14 +189,14 @@
                 <p style="color: #898989; font-size: 14px;">Solde disponible</p>
             </div>
         </div>
-        <div class="card2">
+        <div class="card2" onclick="window.location.href='publier.php';">
             <div class="icon2"><i class="fas fa-plus"></i></div>
             <div class="text">
                 <p style="font-size: 18px;">Publier une nouvelle annonce</p>
                 <p style="color: #898989; font-size: 12px;">Créer et publier une nouvelle annonce pour...</p>
             </div>
         </div>
-        <div class="card2">
+        <div class="card2" onclick="window.location.href='#';">
             <div class="icon2"><i class="fa-brands fa-buffer"></i></div>
             <div class="text">
                 <p style="font-size: 18px;">Voir mes annonces</p>
@@ -212,18 +220,18 @@
         <div class="card2">
             <div class="icon2"><i class="fas fa-cog"></i></div>
             <div class="text">
-                <p style="font-size: 20px;">Modifier mon profil</p>
-                <p style="color: #898989; font-size: 12px;">Mettre à jour mes informations personnelles...</p>
+                <p style="font-size: 20px;">Parametres</p>
+                <p style="color: #898989; font-size: 12px;">Gérer vos paramètres des comptes</p>
            </div>
         </div>
-    </main>
+        <div class="card2" onclick="window.location.href='deconnexion.php';">
+            <div class="icon2"><i class="fas fa-lock-open"></i></div>
+            <div class="text">
+                <p style="font-size: 20px;">Deconnexion</p>
+                <p style="color: #898989; font-size: 12px;">Deconnecter de votre compte</p>
+            </div>
+        </div>
 
-    <div class="navbar">
-        <a href="accueil.html" title="Accueil"><i class="fas fa-house-chimney icon"></i><span>Accueil</span></a>
-        <a href="accueil.html" title="Recherche"><i class="fas fa-search icon"></i><span>Recherche</span></a>
-        <a href="publier.html" title="Publier"><i class="fas fa-plus-circle icon"></i><span>Publier</span></a>
-        <a href="#" title="Messages"><i class="fas fa-message icon"></i><span>Messages</span></a>
-        <a class="active" href="#" title="Compte"><i class="fas fa-user icon"></i><span>Compte</span></a>
-    </div>
+    </main>
 </body>
 </html>

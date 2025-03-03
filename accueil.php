@@ -1,3 +1,14 @@
+<?php
+session_start(); // Démarre la session PHP pour accéder aux variables de session
+
+// Vérifiez si l'utilisateur est connecté
+if (!isset($_SESSION['user'])) {
+    // Redirigez l'utilisateur vers la page de connexion si ce n'est pas le cas
+    header('Location: connexion.php'); // Remplacez 'login.php' par la page de votre choix
+    exit(); // Arrête l'exécution du script
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Accueil</title>
-    
+
     <!-- Lien vers la bibliothèque Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
