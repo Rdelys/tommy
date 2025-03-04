@@ -50,7 +50,7 @@
     <a class="<?php echo (basename($_SERVER['PHP_SELF']) == '#') ? 'active' : ''; ?>" href="#" title="Messages">
         <i class="fas fa-heart icon"></i><span>Favoris</span>
     </a>
-    <a class="<?php echo (basename($_SERVER['PHP_SELF']) == 'compte.html') ? 'active' : ''; ?>" href="compte.html" title="Compte">
+    <a class="<?php echo (basename($_SERVER['PHP_SELF']) == 'annonce.php') ? 'active' : ''; ?>" href="annonce.php" title="Compte">
         <i class="fas fa-user icon"></i><span>Compte</span>
     </a>
 </div>
