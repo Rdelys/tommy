@@ -290,23 +290,32 @@ if (!isset($_SESSION['user'])) {
             <input type="text" placeholder="Rechercher...">
         </div>
         <div class="category-cards-container">
-            <div class="category-card">
-                <i class="fas fa-hotel"></i>
-                <span>Immobilier</span>
-            </div>
-            <div class="category-card">
-                <i class="fas fa-car"></i>
-                <span>Véhicules</span>
-            </div>
-            <div class="category-card">
-                <i class="fas fa-chair"></i>
-                <span>Meubles</span>
-            </div>
-            <div class="category-card">
-                <i class="fas fa-ellipsis-h"></i>
-                <span>Autres</span>
-            </div>            
-        </div>
+    <div class="category-card">
+        <i class="fas fa-hotel"></i>
+        <a href="liste.php?category=immobilier" style="text-decoration: none;">
+            <span>Immobilier</span>
+        </a>
+    </div>
+    <div class="category-card">
+        <i class="fas fa-car"></i>
+        <a href="liste.php?category=vehicules" style="text-decoration: none;">
+            <span>Véhicules</span>
+        </a>
+    </div>
+    <div class="category-card">
+        <i class="fas fa-chair"></i>
+        <a href="liste.php?category=meubles" style="text-decoration: none;">
+            <span>Meubles</span>
+        </a>
+    </div>
+    <div class="category-card">
+        <i class="fas fa-ellipsis-h"></i>
+        <a href="liste.php?category=autres" style="text-decoration: none;">
+            <span>Autres</span>
+        </a>
+    </div>
+</div>
+
         <div class="advertisement-banner">
             PUBLICITES
         </div>
