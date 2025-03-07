@@ -15,8 +15,6 @@ if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
     $saved_password = "";
 }
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -33,8 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Vérification du mot de passe
             if (password_verify($password, $row['password'])) {
-                $_SESSION['user'] = $row['nomEtprenom']; // Stocker le nom dans la session
-            
+                // Stocker le nom et l'ID de l'utilisateur dans la session
+                $_SESSION['user'] = $row['nomEtprenom']; // Stocker le nom de l'utilisateur dans la session
+                $_SESSION['user_id'] = $row['id']; // Stocker l'ID de l'utilisateur dans la session
+
                 // Se souvenir de moi
                 if (isset($_POST['remember'])) {
                     setcookie('email', $email, time() + (86400 * 30), "/"); // 30 jours
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     setcookie('email', '', time() - 3600, "/"); // Efface le cookie
                     setcookie('password', '', time() - 3600, "/"); // Efface le cookie
                 }
-            
+
                 // Redirection vers accueil
                 header("Location: accueil.php");
                 exit();
@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

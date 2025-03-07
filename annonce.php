@@ -1,3 +1,13 @@
+<?php
+session_start(); // Démarre la session PHP pour accéder aux variables de session
+
+// Vérifiez si l'utilisateur est connecté
+if (!isset( $_SESSION['user_id'])) {
+    // Redirigez l'utilisateur vers la page de connexion si ce n'est pas le cas
+    header('Location: connexion.php');
+    exit(); // Arrête l'exécution du script
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -118,22 +128,39 @@
             margin-top: 5px;
         }
 
+        .dropdown-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #fd9b00;
+        }
     </style>
 </head>
 <body>
-    <?php include('topbar.php'); ?>
+<?php include('topbar.php'); ?>
 
-    <main>
-        <h2>Mes annonces</h2>
+<main>
+    <h2>Mes annonces</h2>
 
-        <?php
-        include 'connecte.php';
-        $sql = "SELECT pd.id, pd.titre, pd.categorie, gp.ville, pp.photo1 
-                FROM produitdetail pd 
-                JOIN geoproduit gp ON pd.id = gp.idproduit 
-                JOIN produitphoto pp ON pd.id = pp.idproduit";
-        $result = $conn->query($sql);
-
+    <?php
+    include 'connecte.php';
+    
+    // Utilisation de l'ID de l'utilisateur connecté pour filtrer les annonces
+    $user_id = $_SESSION['user_id'];
+    
+    // Requête SQL modifiée pour récupérer les annonces de l'utilisateur connecté
+    $sql = "SELECT pd.id, pd.titre, pd.categorie, gp.ville, pp.photo1 
+            FROM produitdetail pd 
+            JOIN geoproduit gp ON pd.id = gp.idproduit 
+            JOIN produitphoto pp ON pd.id = pp.idproduit
+            WHERE pd.idusers = ?";
+    
+    // Préparer et exécuter la requête avec un paramètre préparé
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("i", $user_id); // "i" pour un entier (user_id)
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        // Vérifier si des résultats sont trouvés
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "
@@ -155,34 +182,40 @@
         } else {
             echo "<p>Aucune annonce trouvée.</p>";
         }
-        $conn->close();
-        ?>
-    </main>
+        $stmt->close(); // Fermer la requête préparée
+    } else {
+        echo "<p>Erreur lors de la récupération des annonces.</p>";
+    }
 
-    <?php include('navbar.php'); ?>
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".delete-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                let id = this.getAttribute("data-id");
-                if (confirm("Voulez-vous vraiment supprimer cette annonce ?")) {
-                    fetch("delete_annonce.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                        body: "id=" + id
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data === "success") {
-                            this.closest(".card").remove();
-                        } else {
-                            alert("Erreur lors de la suppression.");
-                        }
-                    });
-                }
-            });
+    $conn->close();
+    ?>
+</main>
+
+<?php include('navbar.php'); ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let id = this.getAttribute("data-id");
+            if (confirm("Voulez-vous vraiment supprimer cette annonce ?")) {
+                fetch("delete_annonce.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "id=" + id
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (data === "success") {
+                        this.closest(".card").remove();
+                    } else {
+                        alert("Erreur lors de la suppression.");
+                    }
+                });
+            }
         });
     });
+});
 </script>
 
 </body>

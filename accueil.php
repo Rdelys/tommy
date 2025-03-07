@@ -329,7 +329,9 @@ if (!isset($_SESSION['user'])) {
             </div>
             <div class="carousel-wrapper" id="carouselWrapper">
                 <div class="carousel-item">
+                    <a href="produit.php" style="text-decoration: none;">
                     <img src="./images/carrousel/meubles/meubles1.jpeg" alt="Produit 1">
+                    </a>
                         <div class="carousel-item-details">
                             <h3>Etagère et lavabo</h3>
                             <p style="color: #e89f2f; font-weight: bold;">500 €</p>

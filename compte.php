@@ -2,12 +2,43 @@
 session_start(); // Démarre la session PHP pour accéder aux variables de session
 
 // Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['user'])) {
+if (!isset( $_SESSION['user_id'])) {
     // Redirigez l'utilisateur vers la page de connexion si ce n'est pas le cas
-    header('Location: connexion.php'); // Remplacez 'login.php' par la page de votre choix
+    header('Location: connexion.php');
     exit(); // Arrête l'exécution du script
 }
+include 'connecte.php'; // Fichier de connexion à la base de données
+
+
+// Récupérer l'ID de l'utilisateur connecté
+$userId = $_SESSION['user_id']; // Assurez-vous que l'ID de l'utilisateur est stocké dans la session
+
+// Préparer la requête pour obtenir les informations de l'utilisateur
+$sql = "SELECT nomEtprenom, email, DATE_FORMAT(dateAjoute, '%d/%m/%Y') AS date_creation, solde FROM utilisateur WHERE id = ?";
+$stmt = $conn->prepare($sql);
+
+// Lier les paramètres
+$stmt->bind_param("i", $userId); // "i" pour integer (ID de l'utilisateur)
+
+// Exécuter la requête
+$stmt->execute();
+
+// Récupérer les résultats
+$result = $stmt->get_result();
+
+// Vérifier si l'utilisateur existe
+if ($result->num_rows > 0) {
+    // L'utilisateur existe, récupérer ses données
+    $user = $result->fetch_assoc();
+} else {
+    // Si l'utilisateur n'existe pas, afficher un message d'erreur
+    die("Utilisateur non trouvé.");
+}
+
+$stmt->close(); // Fermer le statement
+$conn->close(); // Fermer la connexion à la base de données
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -173,19 +204,20 @@ if (!isset($_SESSION['user'])) {
     <?php include('topbar.php'); ?>
 
     <main>
-        <div class="card">
-            <div class="icon"><i class="fas fa-user"></i></div>
-            <div class="text">
-                <p style="font-weight: bold;">Nom prénom</p><br>
-                <p style="color: #898989; font-size: 15px;">Mail</p>
-                <p style="color: #898989; font-size: 14px;">Membre depuis</p>
-            </div>
-        </div>
+    <div class="card">
+    <div class="icon"><i class="fas fa-user"></i></div>
+    <div class="text">
+        <p style="font-weight: bold;"><?php echo htmlspecialchars($user['nomEtprenom']); ?></p><br>
+        <p style="color: #898989; font-size: 15px;"><?php echo htmlspecialchars($user['email']); ?></p>
+        <p style="color: #898989; font-size: 14px;">Membre depuis <?php echo $user['date_creation']; ?></p>
+    </div>
+</div>
+
 
         <div class="card">
             <div class="text">
                 <p style="font-weight: bold;">Porte-monnaie</p>
-                <p style="color: #159062; font-weight: bold;">€</p>
+                <p style="color: #159062; font-weight: bold;"><?php echo htmlspecialchars($user['solde']); ?>€</p>
                 <p style="color: #898989; font-size: 14px;">Solde disponible</p>
             </div>
         </div>
@@ -196,7 +228,7 @@ if (!isset($_SESSION['user'])) {
                 <p style="color: #898989; font-size: 12px;">Créer et publier une nouvelle annonce pour...</p>
             </div>
         </div>
-        <div class="card2" onclick="window.location.href='#';">
+        <div class="card2" onclick="window.location.href='annonce.php';">
             <div class="icon2"><i class="fa-brands fa-buffer"></i></div>
             <div class="text">
                 <p style="font-size: 18px;">Voir mes annonces</p>
